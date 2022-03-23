@@ -2,33 +2,64 @@
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
-namespace Builder
+/*
+ * Please just don't touch this file
+ * Build pipeline relies on names
+ * If it is broken, I am so sorry
+ */
+
+namespace Builder // do not rename
 {
-    public class GameBuilder : MonoBehaviour
+    public class GameBuilder : MonoBehaviour // do not rename
     {
-        [MenuItem("Build/Build windows")]
+        [MenuItem("Build/Build Windows")]
         public static void PerformWindowsBuild() // do not rename
         {
-            BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
-            buildPlayerOptions.scenes = new[] {"Assets/Scenes/SampleScene.unity"};
-            buildPlayerOptions.locationPathName = "build/windows/theDungeonIsYou.exe";
-            buildPlayerOptions.target = BuildTarget.StandaloneWindows;
-            buildPlayerOptions.options = BuildOptions.None;
-
-            BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
-            BuildSummary summary = report.summary;
-
-            if (summary.result == BuildResult.Succeeded)
+            var buildPlayerOptions = new BuildPlayerOptions
             {
-                Debug.Log("Build succeeded");
-            }
+                scenes = new[] {"Assets/Scenes/SampleScene.unity"}, // obvs add the rest here
+                locationPathName = "build/windows/theDungeonIsYou.exe", 
+                target = BuildTarget.StandaloneWindows,
+                options = BuildOptions.None
+            };
 
-            if (summary.result == BuildResult.Failed)
+            var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+            var summary = report.summary;
+
+            switch (summary.result)
             {
-                Debug.LogError("Build failed");
+                case BuildResult.Succeeded:
+                    Debug.Log("Build succeeded");
+                    break;
+                case BuildResult.Failed:
+                    Debug.LogError("Build failed");
+                    break;
             }
-            
+        } 
+        
+        [MenuItem("Build/Build Web")]
+        public static void PerformWebBuild() // do not rename
+        {
+            BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
+            {
+                scenes = new[] {"Assets/Scenes/SampleScene.unity"},
+                locationPathName = "build/WebGL",
+                target = BuildTarget.WebGL,
+                options = BuildOptions.None
+            };
 
+            var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+            var summary = report.summary;
+
+            switch (summary.result)
+            {
+                case BuildResult.Succeeded:
+                    Debug.Log("Build succeeded");
+                    break;
+                case BuildResult.Failed:
+                    Debug.LogError("Build failed");
+                    break;
+            }
         }
     }
 }
