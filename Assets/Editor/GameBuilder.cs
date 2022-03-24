@@ -1,6 +1,11 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using NUnit.Framework;
+using UnityEditor;
 using UnityEditor.Build.Reporting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /*
  * Please just don't touch this file
@@ -15,17 +20,19 @@ namespace Builder // do not rename
         [MenuItem("Build/Build Windows")]
         public static void PerformWindowsBuild() // do not rename
         {
+            var scenePaths = GetScenesInBuild();
+
             var buildPlayerOptions = new BuildPlayerOptions
             {
-                scenes = new[] {"Assets/Scenes/SampleScene.unity"}, // obvs add the rest here
+                scenes = scenePaths, 
                 locationPathName = "build/windows/theDungeonIsYou.exe", 
                 target = BuildTarget.StandaloneWindows,
                 options = BuildOptions.None
             };
 
             var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+            
             var summary = report.summary;
-
             switch (summary.result)
             {
                 case BuildResult.Succeeded:
@@ -35,22 +42,24 @@ namespace Builder // do not rename
                     Debug.LogError("Build failed");
                     break;
             }
-        } 
-        
+        }
+
         [MenuItem("Build/Build Web")]
         public static void PerformWebBuild() // do not rename
         {
-            BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
+            var scenePaths = GetScenesInBuild();
+            
+            var buildPlayerOptions = new BuildPlayerOptions
             {
-                scenes = new[] {"Assets/Scenes/SampleScene.unity"},
+                scenes = scenePaths,
                 locationPathName = "build/WebGL",
                 target = BuildTarget.WebGL,
                 options = BuildOptions.None
             };
 
             var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+            
             var summary = report.summary;
-
             switch (summary.result)
             {
                 case BuildResult.Succeeded:
@@ -60,6 +69,18 @@ namespace Builder // do not rename
                     Debug.LogError("Build failed");
                     break;
             }
+        }
+        private static string[] GetScenesInBuild()
+        {
+            var sceneCount = SceneManager.sceneCountInBuildSettings;
+            var scenePaths = new string[sceneCount];
+
+            for (var i = 0; i < sceneCount; i++)
+            {
+                scenePaths[i] = SceneUtility.GetScenePathByBuildIndex(i);
+            }
+
+            return scenePaths;
         }
     }
 }
