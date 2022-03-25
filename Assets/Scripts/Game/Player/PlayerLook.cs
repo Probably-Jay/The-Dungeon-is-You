@@ -6,42 +6,59 @@ namespace Player
 {
     public class PlayerLook : MonoBehaviour
     {
-        [SerializeField] private LookVariables lookVariables;
         private ILookGatherer lookGatherer;
-        
+        [SerializeField] private Transform cameraTransform;
+        [SerializeField] private LookVariables lookVariables;
 
         private void Awake()
         {
             this.AssignGetComponentTo<LookGatherer, ILookGatherer>(out lookGatherer);
+            this.AssertNotNull(cameraTransform);
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             ApplyHorizontalRotation();
             ApplyVerticalRotation();
         }
 
-        private void ApplyVerticalRotation()
-        {
-            //throw new NotImplementedException();
-        }
-
         private void ApplyHorizontalRotation()
         {
-            var rotationDelta = lookGatherer.ReadMouseXDelta();
-            var scaledRotationDelta = rotationDelta * lookVariables.xRotationSpeed * Time.fixedDeltaTime;
+            var rotationDelta = lookGatherer.ReadMouseHorizontalDelta();
+            var scaledRotationDelta = rotationDelta * lookVariables.rotationSpeed.x; //* Time.deltaTime;
 
             var currentRotation = transform.rotation.eulerAngles; 
-            var newYRotation = currentRotation.y + scaledRotationDelta; // y is the horizontal axis
+            var newYRotation = currentRotation.y + scaledRotationDelta; // y is the vertical axis which will apply horizontal rotation
 
+            
             transform.localRotation = Quaternion.Euler(currentRotation.x, newYRotation, currentRotation.z );
         }
-        
+
+        private void ApplyVerticalRotation()
+        {
+            var rotationDelta = lookGatherer.ReadMouseVerticalDelta();
+            var scaledRotationDelta = rotationDelta * lookVariables.rotationSpeed.y; //* Time.deltaTime;
+            
+            var currentLookRotation = cameraTransform.rotation.eulerAngles; 
+            
+            var newXRotation = currentLookRotation.x + scaledRotationDelta; // x is the horizontal axis which will apply vertical rotation
+            
+            newXRotation = ClampToView(newXRotation);
+            
+            cameraTransform.rotation = Quaternion.Euler(newXRotation, currentLookRotation.y, currentLookRotation.z );
+        }
+
+        private float ClampToView(float newXRotation)
+        {
+            var normalisedXRotation = newXRotation > 180 ? newXRotation - 360f : newXRotation;
+            return Mathf.Clamp(normalisedXRotation, -lookVariables.maxCamAngle, lookVariables.maxCamAngle);
+        }
+
         [Serializable]
         private class LookVariables
         {
-            public float xRotationSpeed;
-            public float yRotationSpeed;
+            public Vector2 rotationSpeed;
+            public float maxCamAngle;
         }
     }
 }

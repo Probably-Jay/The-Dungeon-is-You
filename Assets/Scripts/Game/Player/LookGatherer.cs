@@ -5,8 +5,8 @@ namespace Player
 {
     internal interface ILookGatherer
     {
-        float ReadMouseXDelta();
-        float ReadMouseYDelta();
+        float ReadMouseHorizontalDelta();
+        float ReadMouseVerticalDelta();
     }
     class LookGatherer : MonoBehaviour, ILookGatherer
     {
@@ -14,7 +14,7 @@ namespace Player
         
         private Vector2 mouseDelta = Vector2.zero;
 
-        private Vector2 lastFrameMousePosition;
+        //private Vector2 lastFrameMousePosition;
 
         private void Awake()
         {
@@ -23,27 +23,35 @@ namespace Player
             
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+            UpdateMouseDelta();
         }
 
         private void Update()
         {
+            UpdateMouseDelta();
+        }
+
+        private void UpdateMouseDelta()
+        {
             mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         }
 
-        private void GetMouse()
-        {
-            var currentMousePosition = Input.mousePosition;
+        // private void GetMouse()
+        // {
+        //     var currentMousePosition = Input.mousePosition;
+        //
+        //     mouseDelta = new Vector2(currentMousePosition.x, currentMousePosition.y) - lastFrameMousePosition;
+        //
+        //     if (mouseDelta.magnitude < 0.01)
+        //         mouseDelta = Vector2.zero;
+        //
+        //     lastFrameMousePosition = currentMousePosition;
+        // }
 
-            mouseDelta = new Vector2(currentMousePosition.x, currentMousePosition.y) - lastFrameMousePosition;
+        public float ReadMouseHorizontalDelta() => mouseDelta.x;
 
-            if (mouseDelta.magnitude < 0.01)
-                mouseDelta = Vector2.zero;
-
-            lastFrameMousePosition = currentMousePosition;
-        }
-
-        public float ReadMouseXDelta() => mouseDelta.x;
-
-        public float ReadMouseYDelta() => mouseDelta.y;
+        public float ReadMouseVerticalDelta() => -mouseDelta.y;
+        
+        
     }
 }

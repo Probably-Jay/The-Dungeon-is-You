@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using System.Reflection;
-using System;
 
 namespace Utility
 {
@@ -15,16 +12,12 @@ namespace Utility
         /// <typeparam name="T">The type of the component to be found</typeparam>
         /// <exception cref="NullReferenceException">Throws if component cannot be found.</exception>
         public static void AssignGetComponentTo<T>(this MonoBehaviour gameObject, out T componentVariable) where T : Component
-        {     
+        {
             componentVariable = gameObject.GetComponent(typeof(T)) as T;
-        
-            if(componentVariable == null || componentVariable.Equals(null))
-            {
-                var type = typeof(T);
-                throw new NullReferenceException($"{type.BaseType} {type.Name} is null in {gameObject.name}");
-            }
-        }      
-        
+
+            gameObject.AssertNotNull(componentVariable);
+        }
+
         /// <summary>
         /// Calls <see cref="GameObject.GetComponent{T}"/> and assigns the result to <paramref name="componentVariable"/> with the type of <typeparamref name="Ti"/>. Debug logs if component cannot be found.
         /// </summary>
@@ -36,27 +29,28 @@ namespace Utility
         {     
             componentVariable = gameObject.GetComponent(typeof(T)) as Ti;
         
-            if(componentVariable == null || componentVariable.Equals(null))
-            {
-                var type = typeof(T);
-                throw new NullReferenceException($"{type.BaseType} {type.Name} is null in {gameObject.name}");
-            }
-        }        
-    
+            gameObject.AssertNotNull(componentVariable as T);
+        }
+
         /// <summary>
         /// Calls <see cref="GameObject.GetComponentInChildren{T}()"/> and assigns the result to <paramref name="componentVariable"/>. Debug logs if component cannot be found.
         /// </summary>
         /// <param name="componentVariable">The variable to hold the component</param>
         /// <typeparam name="T">The type of the component to be found</typeparam>
         /// <exception cref="NullReferenceException">Throws if component cannot be found.</exception>
-        public static void GetComponentInChildrenAndAssignTo<T>(this MonoBehaviour gameObject, out T componentVariable) where T : Component
+        public static void AssignGetComponentInChildrenTo<T>(this MonoBehaviour gameObject, out T componentVariable) where T : Component
         {     
-            componentVariable = gameObject.GetComponentInChildren<T>();
+            componentVariable = gameObject.GetComponentInChildren(typeof(T)) as T;
         
-            if(componentVariable == null || componentVariable.Equals(null))
+            gameObject.AssertNotNull(componentVariable);
+        }
+
+        public static void AssertNotNull<T>(this MonoBehaviour gameObject, T componentVariable) where T : Component
+        {
+            if (componentVariable == null || componentVariable.Equals(null))
             {
                 var type = typeof(T);
-                throw new NullReferenceException($"{type.BaseType} {type.Name} is null in {gameObject.name}");
+                throw new NullReferenceException($"Component {type.Namespace}.{type.Name} is null in \"{gameObject.name}\"");
             }
         }
     }

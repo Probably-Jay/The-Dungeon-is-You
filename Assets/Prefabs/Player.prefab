@@ -288,9 +288,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ac92dc88dc42c9a8e9bf4bc8e1ed07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraTransform: {fileID: 51081962}
   lookVariables:
-    xRotationSpeed: 5
-    yRotationSpeed: 5
+    rotationSpeed: {x: 1000, y: 1000}
 --- !u!114 &2792568416754288186
 MonoBehaviour:
   m_ObjectHideFlags: 0

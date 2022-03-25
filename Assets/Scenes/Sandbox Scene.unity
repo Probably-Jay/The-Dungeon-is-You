@@ -828,6 +828,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 51081962, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 51081962, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 51081962, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 51081962, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 51081962, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5099739747064562968, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
       propertyPath: m_Name
       value: Player
@@ -877,8 +897,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5997656312533588066, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
-      propertyPath: lookVariables.xRotationSpeed
-      value: 1000
+      propertyPath: lookVariables.maxCamAngle
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 5997656312533588066, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
+      propertyPath: lookVariables.rotationSpeed.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5997656312533588066, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
+      propertyPath: lookVariables.rotationSpeed.y
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
