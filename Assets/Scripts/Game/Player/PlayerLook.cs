@@ -31,7 +31,7 @@ namespace Player
             var newYRotation = currentRotation.y + scaledRotationDelta; // y is the vertical axis which will apply horizontal rotation
 
             
-            transform.localRotation = Quaternion.Euler(currentRotation.x, newYRotation, currentRotation.z );
+            transform.rotation = Quaternion.Euler(currentRotation.x, newYRotation, currentRotation.z );
         }
 
         private void ApplyVerticalRotation()
@@ -45,7 +45,7 @@ namespace Player
             
             newXRotation = ClampToView(newXRotation);
             
-            cameraTransform.rotation = Quaternion.Euler(newXRotation, currentLookRotation.y, currentLookRotation.z );
+            cameraTransform.rotation = Quaternion.Euler(newXRotation, currentLookRotation.y, currentLookRotation.z ); // i have no idea why this needs to be rotation not localrotation
         }
 
         private float ClampToView(float newXRotation)
