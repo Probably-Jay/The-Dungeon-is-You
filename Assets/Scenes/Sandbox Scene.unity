@@ -2306,8 +2306,16 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5099739747064562971, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
+      propertyPath: movementVariables.runValue
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099739747064562971, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
+      propertyPath: movementVariables.walkValue
+      value: 275
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099739747064562971, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
       propertyPath: movementVariables.minRunVelocity
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 5099739747064562974, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
       propertyPath: m_RootOrder
