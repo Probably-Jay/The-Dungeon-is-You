@@ -1,25 +1,68 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Utility;
 
 namespace Player
 {
+    class Walking : IMovement
+    {
+        private readonly Rigidbody rb;
+        private readonly PlayerMovement.MovementVariables movementVariables;
+
+        public Walking(Rigidbody rigidbody, PlayerMovement.MovementVariables  movementVariables)
+        {
+            rb = rigidbody;
+            this.movementVariables = movementVariables;
+        }
+        public void ApplyMovement(Vector3 movementForce)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ReachedMaxMovementVelocity => rb.velocity.magnitude >= movementVariables.maxWalkVelocity;
+    }
+
+    public class Running : IMovement
+    {
+        private readonly Rigidbody rb;
+        private readonly PlayerMovement.MovementVariables movementVariables;
+
+        public Running(Rigidbody rigidbody,PlayerMovement.MovementVariables  movementVariables)
+        {
+            rb = rigidbody;
+            this.movementVariables = movementVariables;
+        }
+
+        public bool ReachedMaxMovementVelocity => rb.velocity.magnitude >= movementVariables.maxRunVelocity;
+
+        private Vector3 CalculateMovementForce(Vector3 movementDirection) 
+            => movementDirection * movementVariables.movementSpeed * Time.fixedDeltaTime;
+
+        public void ApplyMovement(Vector3 movementDirection)
+        {
+            var movementForce = CalculateMovementForce(movementDirection);
+            rb.AddForce(movementForce);
+        }
+    }
+
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] private MovementVariables movementVariables;
         private IInputGatherer inputGatherer;
         private IGroundedDetector groundedDetector;
-        private Rigidbody rb;
-      //  private readonly PlayerLook playerLook;
+
         
+        //  private readonly PlayerLook playerLook;
+        private MovementModeProvider moveModeProvider;
 
         private void Awake()
         {
             this.AssignGetComponentTo<InputGatherer, IInputGatherer>(out inputGatherer);
             this.AssignGetComponentTo<GroundedDetector, IGroundedDetector>(out groundedDetector);
-            this.AssignGetComponentTo(out rb);
+            this.AssignGetComponentTo(out Rigidbody rb);
+
+            moveModeProvider = new MovementModeProvider(rb, movementVariables);
         }
 
         private void FixedUpdate()
@@ -39,13 +82,11 @@ namespace Player
 
             if (movementDirection == Vector3.zero)
                 return;
-
-            var movementForce = CalculateMovementForce(movementDirection);
-
-            ApplyMovementForce(movementForce);
+            
+            moveModeProvider.Current.ApplyMovement(movementDirection);
         }
 
-        private bool ReachedMaxMovementVelocity => rb.velocity.magnitude >= movementVariables.maxVelocity;
+        private bool ReachedMaxMovementVelocity => moveModeProvider.Current.ReachedMaxMovementVelocity;
 
         private Vector3 GetMovementInput()
         {
@@ -55,11 +96,7 @@ namespace Player
             return movementDirection;
         }
 
-        private Vector3 CalculateMovementForce(Vector3 movementDirection) 
-            => movementDirection * movementVariables.movementSpeed * Time.fixedDeltaTime;
-
-        private void ApplyMovementForce(Vector3 movementForce) 
-            => rb.AddForce(movementForce);
+      
 
 
         private Vector3 RotateInputToLocal(Vector3 movementInput) 
@@ -74,10 +111,11 @@ namespace Player
        
 
         [Serializable]
-        private class MovementVariables
+        public class MovementVariables
         {
             public float movementSpeed;
-            public float maxVelocity;
+            public float maxRunVelocity;
+            public float maxWalkVelocity;
             public float jumpForce;
           
         }
