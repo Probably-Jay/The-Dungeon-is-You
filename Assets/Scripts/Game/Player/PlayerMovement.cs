@@ -16,7 +16,7 @@ namespace Player
             this.movementVariables = movementVariables;
         }
 
-        public bool ReachedMaxMovementVelocity => rb.velocity.magnitude >= movementVariables.maxWalkVelocity;
+        public bool ReachedMaxMovementVelocity => false;
 
         public void ApplyMovement(Vector3 movementDirection)
         {
@@ -79,21 +79,18 @@ namespace Player
 
         private void ApplyMovement()
         {
-            if(ReachedMaxMovementVelocity)
+            var movement = moveModeProvider.Current;
+            
+            if(movement.ReachedMaxMovementVelocity)
                 return;
 
             if (!groundedDetector.CanWalk)
                 return;
 
             var movementDirection = GetMovementInput();
-
-            if (movementDirection == Vector3.zero)
-                return;
             
-            moveModeProvider.Current.ApplyMovement(movementDirection);
+            movement.ApplyMovement(movementDirection);
         }
-
-        private bool ReachedMaxMovementVelocity => moveModeProvider.Current.ReachedMaxMovementVelocity;
 
         private Vector3 GetMovementInput()
         {
@@ -123,7 +120,7 @@ namespace Player
             public float runSpeed;
             public float walkSpeed;
             public float maxRunVelocity;
-            public float maxWalkVelocity;
+      //      public float maxWalkVelocity;
             public float jumpForce;
           
         }
