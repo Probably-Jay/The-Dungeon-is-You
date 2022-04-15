@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace Player
 {
@@ -9,6 +10,8 @@ namespace Player
         void ApplyMovement(Vector3 movementDirection);
         bool ReachedMaxMovementVelocity { get; }
     }
+
+
     internal class MovementModeProvider
     {
         public enum MovementMode
@@ -33,15 +36,35 @@ namespace Player
         } 
 
         public IMovement Current => modes[Mode];
-        public MovementMode Mode { get; set; }
+        public MovementMode Mode { get; private set; }
 
-        public void UpdateMode(bool sprintButtonHeld)
+        public void UpdateMovementMode(bool sprintButtonPressed, Vector3 rbVelocity)
         {
-            Mode = sprintButtonHeld switch
-            {
-                true => MovementMode.Running,
-                false => MovementMode.Walking
-            };
+            Mode = ModeDeterminer.DetermineMovementMode(Mode, sprintButtonPressed, rbVelocity);
         }
+       
+    }
+    internal static class ModeDeterminer
+    {
+        public static MovementModeProvider.MovementMode DetermineMovementMode(MovementModeProvider.MovementMode currentMode, bool sprintButtonWasPressed, Vector3 rbVelocity)
+        {
+            if (NotMoving(rbVelocity))
+                return MovementModeProvider.MovementMode.Walking;
+
+            if (ModeIsWalking(currentMode))
+                return sprintButtonWasPressed switch
+                {
+                    true => MovementModeProvider.MovementMode.Running,
+                    false => MovementModeProvider.MovementMode.Walking
+                };
+            
+            return currentMode;
+        }
+
+        private static bool ModeIsWalking(MovementModeProvider.MovementMode currentMode) 
+            => currentMode == MovementModeProvider.MovementMode.Walking;
+
+        private static bool NotMoving(Vector3 rbVelocity) 
+            => rbVelocity == Vector3.zero;
     }
 }

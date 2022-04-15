@@ -63,26 +63,27 @@ namespace Player
         
         //  private readonly PlayerLook playerLook;
         private MovementModeProvider moveModeProvider;
+        private Rigidbody rb;
 
         private void Awake()
         {
             this.AssignGetComponentTo<InputGatherer, IInputGatherer>(out inputGatherer);
             this.AssignGetComponentTo<GroundedDetector, IGroundedDetector>(out groundedDetector);
-            this.AssignGetComponentTo(out Rigidbody rb);
+            this.AssignGetComponentTo(out rb);
 
             moveModeProvider = new MovementModeProvider(rb, movementVariables);
         }
-
-        private void Update()
-        {
-            var SprintButtonHeld = Input.GetKey(KeyCode.LeftShift);
-            moveModeProvider.UpdateMode(SprintButtonHeld);
-        }
-
-
+        
         private void FixedUpdate()
         {
+            SetMovementMode();
             ApplyMovement();
+        }
+
+        private void SetMovementMode()
+        {
+            var sprintButtonPressed = inputGatherer.ReadShouldRun();
+            moveModeProvider.UpdateMovementMode(sprintButtonPressed, rb.velocity);
         }
 
         private void ApplyMovement()
