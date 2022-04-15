@@ -21,6 +21,7 @@ namespace Player
         public void ApplyMovement(Vector3 movementDirection)
         {
             var velocity = CalculateVelocity(movementDirection);
+            velocity.y = rb.velocity.y;
             rb.velocity = velocity;
         }
 
