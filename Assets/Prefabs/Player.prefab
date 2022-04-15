@@ -29,7 +29,6 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5099739747064562974}
   m_RootOrder: 0
@@ -130,6 +129,7 @@ GameObject:
   - component: {fileID: 5099739747064562975}
   - component: {fileID: 5099739747064562972}
   - component: {fileID: 5099739747064562973}
+  - component: {fileID: 6153399863262804869}
   - component: {fileID: 5099739747064562970}
   - component: {fileID: 5099739747064562971}
   - component: {fileID: 3984912686578191767}
@@ -153,7 +153,6 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 51081962}
   m_Father: {fileID: 0}
@@ -178,7 +177,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -216,13 +214,26 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5099739747064562968}
-  m_Material: {fileID: 13400000, guid: 64c0fc20c39ad6740b821fb4825f8230, type: 2}
+  m_Material: {fileID: 13400000, guid: 1dafbdd6ceeb3644696a7c7e9c12dd73, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 1.6609423
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.16952884, z: 0}
+--- !u!135 &6153399863262804869
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5099739747064562968}
+  m_Material: {fileID: 13400000, guid: 64c0fc20c39ad6740b821fb4825f8230, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.4
+  m_Center: {x: 0, y: -0.6, z: 0}
 --- !u!54 &5099739747064562970
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -252,9 +263,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementVariables:
-    movementSpeed: 1000
-    maxRunVelocity: 7
-    maxWalkVelocity: 5
+    runSpeed: 1000
+    walkSpeed: 275
+    maxRunVelocity: 9
     jumpForce: 0
 --- !u!114 &3984912686578191767
 MonoBehaviour:
