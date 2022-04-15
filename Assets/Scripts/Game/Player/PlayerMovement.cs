@@ -5,7 +5,8 @@ using Utility;
 
 namespace Player
 {
-    class Walking : IMovement
+    [Serializable]
+    public class Walking : IMovement
     {
         private readonly Rigidbody rb;
         private readonly PlayerMovement.MovementVariables movementVariables;
@@ -27,10 +28,11 @@ namespace Player
 
         private Vector3 CalculateVelocity(Vector3 movementDirection)
         {
-            return movementDirection * movementVariables.walkSpeed * Time.fixedDeltaTime;
+            return movementDirection * movementVariables.walkValue * Time.fixedDeltaTime;
         }
     }
 
+    [Serializable]
     public class Running : IMovement
     {
         private readonly Rigidbody rb;
@@ -51,7 +53,7 @@ namespace Player
         }
 
         private Vector3 CalculateMovementForce(Vector3 movementDirection) 
-            => movementDirection * movementVariables.runSpeed * Time.fixedDeltaTime;
+            => movementDirection * movementVariables.runValue * Time.fixedDeltaTime;
     }
 
     public class PlayerMovement : MonoBehaviour
@@ -71,7 +73,9 @@ namespace Player
             this.AssignGetComponentTo<GroundedDetector, IGroundedDetector>(out groundedDetector);
             this.AssignGetComponentTo(out rb);
 
-            moveModeProvider = new MovementModeProvider(rb, movementVariables);
+            this.AssignGetComponentTo(out moveModeProvider);
+            
+            moveModeProvider.AssignDependencies(rb, movementVariables);
         }
         
         private void FixedUpdate()
@@ -83,7 +87,7 @@ namespace Player
         private void SetMovementMode()
         {
             var sprintButtonPressed = inputGatherer.ReadShouldRun();
-            moveModeProvider.UpdateMovementMode(sprintButtonPressed, rb.velocity);
+            moveModeProvider.UpdateMovementMode(sprintButtonPressed, rb.velocity, movementVariables);
         }
 
         private void ApplyMovement()
@@ -124,12 +128,13 @@ namespace Player
        
 
         [Serializable]
-        public class MovementVariables
+        public struct MovementVariables
         {
-            public float runSpeed;
-            public float walkSpeed;
+            public float runValue;
+            public float walkValue;
             public float maxRunVelocity;
       //      public float maxWalkVelocity;
+            public float minRunVelocity;
             public float jumpForce;
           
         }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -12,19 +13,22 @@ namespace Player
     }
 
 
-    internal class MovementModeProvider
+    public class MovementModeProvider : MonoBehaviour
     {
+        [SerializeField] private MovementMode debugForcedMode = MovementMode.None;
+        [SerializeField,Description("Debug readout of current mode (readonly)")] private MovementMode debugCurrentModeReadonly = MovementMode.None;
         public enum MovementMode
         {
+            None,
             Walking,
             Running
         }
-        private Running running;
-        private Walking walking;
+        [SerializeField] private Walking walking;
+        [SerializeField] private Running running;
 
-        private readonly ReadOnlyDictionary<MovementMode, IMovement> modes;
+        private ReadOnlyDictionary<MovementMode, IMovement> modes;
 
-        public MovementModeProvider(Rigidbody rb, PlayerMovement.MovementVariables variables)
+        public void AssignDependencies(Rigidbody rb, PlayerMovement.MovementVariables variables)
         {
             modes = new ReadOnlyDictionary<MovementMode, IMovement>(new  Dictionary<MovementMode, IMovement>()
             {
@@ -38,17 +42,28 @@ namespace Player
         public IMovement Current => modes[Mode];
         public MovementMode Mode { get; private set; }
 
-        public void UpdateMovementMode(bool sprintButtonPressed, Vector3 rbVelocity)
+        public void UpdateMovementMode(bool sprintButtonPressed, Vector3 rbVelocity,
+            PlayerMovement.MovementVariables movementVariables)
         {
-            Mode = ModeDeterminer.DetermineMovementMode(Mode, sprintButtonPressed, rbVelocity);
+#if UNITY_EDITOR
+            if (debugForcedMode != MovementMode.None)
+            {
+                Mode = debugForcedMode;
+                return;
+            }
+#endif
+            Mode = ModeDeterminer.DetermineMovementMode(Mode, sprintButtonPressed, rbVelocity,movementVariables.minRunVelocity);
+            debugCurrentModeReadonly = Mode;
         }
        
     }
     internal static class ModeDeterminer
     {
-        public static MovementModeProvider.MovementMode DetermineMovementMode(MovementModeProvider.MovementMode currentMode, bool sprintButtonWasPressed, Vector3 rbVelocity)
+        public static MovementModeProvider.MovementMode DetermineMovementMode(
+            MovementModeProvider.MovementMode currentMode, bool sprintButtonWasPressed, Vector3 rbVelocity,
+            float minRunVelocity)
         {
-            if (NotMoving(rbVelocity))
+            if (NotMovingFastEnough(rbVelocity, minRunVelocity))
                 return MovementModeProvider.MovementMode.Walking;
 
             if (ModeIsWalking(currentMode))
@@ -64,7 +79,7 @@ namespace Player
         private static bool ModeIsWalking(MovementModeProvider.MovementMode currentMode) 
             => currentMode == MovementModeProvider.MovementMode.Walking;
 
-        private static bool NotMoving(Vector3 rbVelocity) 
-            => rbVelocity == Vector3.zero;
+        private static bool NotMovingFastEnough(Vector3 rbVelocity, float minRunVelocity) 
+            => rbVelocity.magnitude <= minRunVelocity;
     }
 }
