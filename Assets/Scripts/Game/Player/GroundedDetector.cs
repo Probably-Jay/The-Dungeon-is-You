@@ -9,6 +9,6 @@ namespace Player
 
     class GroundedDetector : MonoBehaviour, IGroundedDetector
     {
-        public bool CanWalk => true;
+        public bool CanWalk => true; // todo implement GroundDetector lol
     }
 }

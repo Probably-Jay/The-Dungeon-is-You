@@ -44,7 +44,7 @@ namespace Player
         
         public bool ReadShouldJump()
         {
-            try
+            try // after return effect
             {
                 return jumpInput;
             }

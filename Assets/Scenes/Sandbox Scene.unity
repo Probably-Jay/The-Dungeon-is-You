@@ -902,11 +902,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5997656312533588066, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
       propertyPath: lookVariables.rotationSpeed.x
-      value: 100
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5997656312533588066, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}
       propertyPath: lookVariables.rotationSpeed.y
-      value: 100
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2753533a0be31e849bbe7d4f67f62b17, type: 3}

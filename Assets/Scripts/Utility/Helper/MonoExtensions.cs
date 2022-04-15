@@ -25,6 +25,7 @@ namespace Utility
         /// <typeparam name="T">The type of the component to be found</typeparam>
         /// <typeparam name="Ti">The type of the variable being assigned to</typeparam>
         /// <exception cref="NullReferenceException">Throws if component cannot be found.</exception>
+        // ReSharper disable once InvalidXmlDocComment
         public static void AssignGetComponentTo<T, Ti>(this MonoBehaviour gameObject, out Ti componentVariable) where T : Component , Ti where Ti : class
         {     
             componentVariable = gameObject.GetComponent(typeof(T)) as Ti;
@@ -38,6 +39,7 @@ namespace Utility
         /// <param name="componentVariable">The variable to hold the component</param>
         /// <typeparam name="T">The type of the component to be found</typeparam>
         /// <exception cref="NullReferenceException">Throws if component cannot be found.</exception>
+        // ReSharper disable once InvalidXmlDocComment
         public static void AssignGetComponentInChildrenTo<T>(this MonoBehaviour gameObject, out T componentVariable) where T : Component
         {     
             componentVariable = gameObject.GetComponentInChildren(typeof(T)) as T;
