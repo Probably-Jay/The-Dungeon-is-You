@@ -29,7 +29,7 @@ namespace Player
                 {MovementMode.Running, new Running(rb,variables)}
                 
             });
-            Mode = MovementMode.Running;
+            Mode = MovementMode.Walking;
         } 
 
         public IMovement Current => modes[Mode];

@@ -15,12 +15,19 @@ namespace Player
             rb = rigidbody;
             this.movementVariables = movementVariables;
         }
-        public void ApplyMovement(Vector3 movementForce)
-        {
-            throw new NotImplementedException();
-        }
 
         public bool ReachedMaxMovementVelocity => rb.velocity.magnitude >= movementVariables.maxWalkVelocity;
+
+        public void ApplyMovement(Vector3 movementDirection)
+        {
+            var velocity = CalculateVelocity(movementDirection);
+            rb.velocity = velocity;
+        }
+
+        private Vector3 CalculateVelocity(Vector3 movementDirection)
+        {
+            return movementDirection * movementVariables.walkSpeed * Time.fixedDeltaTime;
+        }
     }
 
     public class Running : IMovement
@@ -36,14 +43,14 @@ namespace Player
 
         public bool ReachedMaxMovementVelocity => rb.velocity.magnitude >= movementVariables.maxRunVelocity;
 
-        private Vector3 CalculateMovementForce(Vector3 movementDirection) 
-            => movementDirection * movementVariables.movementSpeed * Time.fixedDeltaTime;
-
         public void ApplyMovement(Vector3 movementDirection)
         {
             var movementForce = CalculateMovementForce(movementDirection);
             rb.AddForce(movementForce);
         }
+
+        private Vector3 CalculateMovementForce(Vector3 movementDirection) 
+            => movementDirection * movementVariables.runSpeed * Time.fixedDeltaTime;
     }
 
     public class PlayerMovement : MonoBehaviour
@@ -113,7 +120,8 @@ namespace Player
         [Serializable]
         public class MovementVariables
         {
-            public float movementSpeed;
+            public float runSpeed;
+            public float walkSpeed;
             public float maxRunVelocity;
             public float maxWalkVelocity;
             public float jumpForce;
