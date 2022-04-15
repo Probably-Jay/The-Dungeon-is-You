@@ -73,6 +73,13 @@ namespace Player
             moveModeProvider = new MovementModeProvider(rb, movementVariables);
         }
 
+        private void Update()
+        {
+            var SprintButtonHeld = Input.GetKey(KeyCode.LeftShift);
+            moveModeProvider.UpdateMode(SprintButtonHeld);
+        }
+
+
         private void FixedUpdate()
         {
             ApplyMovement();

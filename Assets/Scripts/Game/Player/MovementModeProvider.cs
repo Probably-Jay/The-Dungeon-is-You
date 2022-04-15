@@ -34,5 +34,14 @@ namespace Player
 
         public IMovement Current => modes[Mode];
         public MovementMode Mode { get; set; }
+
+        public void UpdateMode(bool sprintButtonHeld)
+        {
+            Mode = sprintButtonHeld switch
+            {
+                true => MovementMode.Running,
+                false => MovementMode.Walking
+            };
+        }
     }
 }
