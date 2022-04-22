@@ -25,7 +25,7 @@ namespace Player
         private void ApplyHorizontalRotation()
         {
             var rotationDelta = lookGatherer.ReadMouseHorizontalDelta();
-            var scaledRotationDelta = rotationDelta * lookVariables.rotationSpeed.x; //* Time.deltaTime; ?
+            var scaledRotationDelta = rotationDelta * lookVariables.rotationSpeed.x;
 
             var currentRotation = transform.rotation.eulerAngles; 
             var newYRotation = currentRotation.y + scaledRotationDelta; // y is the vertical axis which will apply horizontal rotation

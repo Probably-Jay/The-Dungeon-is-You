@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Singleton;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : Singleton<InputManager>
 {
@@ -36,4 +37,8 @@ public class InputManager : Singleton<InputManager>
         => playerControls.Player.Sprint.triggered;
 
 
+    public bool DebugKeyPressed(Key key) 
+        => Keyboard.current[key].wasPressedThisFrame;
+    public bool DebugKeyHeld(Key key) 
+        => Keyboard.current[key].isPressed;
 }
