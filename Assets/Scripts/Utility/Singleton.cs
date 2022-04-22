@@ -16,9 +16,9 @@ namespace Singleton
     public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
     {
         private static T instance;
-    
+        
         /// <summary>
-        /// The <see cref="Singleton{T}"/> instance of this class
+        /// The <see cref="Singleton{T}"/> instance of this class. Inheritors must 'new' this
         /// </summary>
         public static T Instance
         {
@@ -63,14 +63,23 @@ namespace Singleton
         /// Will throw <see cref="SingletonDoesNotExistException"/> if instance does not exist
         /// </summary>
         public static void AssertInstanceExists() { if (!InstanceExists && Application.isPlaying) throw new SingletonDoesNotExistException(); }
-
+        
+        /// <summary>
+        /// Finds all singletons to ensure theres only one, assigns us to it, dontDestroysUs
+        /// </summary>
         private static void TryInitialiseSingleton()
         {
             var singleton = FindSingleton();
             SetSingleton(singleton);
-            DontDestroyOnLoad(singleton.gameObject);
+            DontDestroyOnLoad(singleton.transform.root.gameObject);
         }
 
+        /// <summary>
+        /// Finds the singletons in the scene, if only one exists then that's us so return it, otherwise throw
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Singleton{T}.SingletonDoesNotExistException"></exception>
+        /// <exception cref="Singleton{T}.MultipleSingletonInSceneException"></exception>
         private static T FindSingleton()
         {
             var singletons = FindObjectsOfType<T>();
@@ -105,7 +114,7 @@ namespace Singleton
         [Serializable]
         protected class SingletonDoesNotExistException : Exception
         {
-            public static string DoesNotExistMessage => $"{typeof(Singleton<T>)} is required by a script, but does not exist in (or has not been initialised in) scene \"{SceneManager.GetActiveScene().name}\".";
+            public static string DoesNotExistMessage => $"{typeof(Singleton<T>)} is required by a script, but does not exist in scene \"{SceneManager.GetActiveScene().name}\".";
             public SingletonDoesNotExistException():base(DoesNotExistMessage) { }
         } 
         
@@ -123,5 +132,4 @@ namespace Singleton
         }
 
     }
-    
 }

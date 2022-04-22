@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Player
@@ -13,9 +14,18 @@ namespace Player
     internal class InputGatherer : MonoBehaviour, IInputGatherer
     {
         private Vector3 movementInput = Vector2.zero;
-        private readonly ButtonInput jumpInput = new ButtonInput(KeyCode.Space);
-        private readonly ButtonInput runInput = new ButtonInput(KeyCode.LeftShift);
-        
+        private ButtonInput jumpInput;
+        private ButtonInput runInput;
+        private InputManager inputManger;
+
+
+        private void Awake()
+        {
+            inputManger = InputManager.Instance;
+            jumpInput = new ButtonInput(() => false);
+            runInput = new ButtonInput(inputManger.GetPlayerSprintButtonDown);
+        }
+
         private void Update()
         {
             movementInput = GetMovementDirection();
@@ -23,10 +33,11 @@ namespace Player
             runInput.SetButtonValue();
         }
 
-        private static Vector3 GetMovementDirection()
+        private Vector3 GetMovementDirection()
         {
-            var horizontal = Input.GetAxisRaw("Horizontal");
-            var vertical = Input.GetAxisRaw("Vertical");
+            var movement = inputManger.GetPlayerMovement();
+            var horizontal = movement.x;
+            var vertical = movement.y;
 
             return new Vector3(horizontal,0, vertical).normalized;
         }
@@ -38,14 +49,18 @@ namespace Player
         public bool ReadShouldRun() => runInput.ReadAndReset();
 
 
+        /// <summary>
+        /// Helper class to read a value and reset it when read.
+        /// Ensures input is not missed between Update and FixedUpdate
+        /// </summary>
         private class ButtonInput
         {
             private bool value;
-            private readonly KeyCode button;
+            private readonly Func<bool> isKeyDown;
 
-            public ButtonInput(KeyCode button)
+            public ButtonInput([NotNull] Func<bool> keyDown)
             {
-                this.button = button;
+                this.isKeyDown = keyDown;
                 value = false;
             }
 
@@ -54,7 +69,7 @@ namespace Player
                 if (value) // do not reset until read
                     return;
 
-                value = Input.GetKeyDown(button);
+                value = isKeyDown();
             }
 
             public bool ReadAndReset()

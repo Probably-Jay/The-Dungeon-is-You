@@ -13,11 +13,14 @@ namespace Player
         [SerializeField] private bool lockMouse = true;
         
         private Vector2 mouseDelta = Vector2.zero;
+        private InputManager inputManager;
 
         //private Vector2 lastFrameMousePosition;
 
         private void Awake()
         {
+            inputManager = InputManager.Instance;
+            
             if(!lockMouse)
                 return;
             
@@ -33,7 +36,7 @@ namespace Player
 
         private void UpdateMouseDelta()
         {
-            mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            mouseDelta = inputManager.GetPlayerLookMouseDelta();
         }
 
         // private void GetMouse()

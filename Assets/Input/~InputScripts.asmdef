@@ -1,9 +1,7 @@
 {
-    "name": "~Game",
+    "name": "~InputScripts",
     "rootNamespace": "",
     "references": [
-        "GUID:2e966dce4ba3baa469b5eccda63ffeae",
-        "GUID:7b328405eb399fc41bef6960a4d20d03",
         "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
