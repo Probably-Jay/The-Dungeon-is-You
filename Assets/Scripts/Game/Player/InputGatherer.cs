@@ -11,7 +11,7 @@ namespace Player
         bool ReadShouldRun();
     }
 
-    internal class InputGatherer : MonoBehaviour, IInputGatherer
+    public class InputGatherer : MonoBehaviour, IInputGatherer
     {
         private Vector3 movementInput = Vector2.zero;
         private ButtonInput jumpInput;
@@ -22,7 +22,7 @@ namespace Player
         private void Awake()
         {
             inputManger = InputManager.Instance;
-            jumpInput = new ButtonInput(() => false);
+            jumpInput = new ButtonInput(inputManger.GetPlayerJumpButtonDown);
             runInput = new ButtonInput(inputManger.GetPlayerSprintButtonDown);
         }
 

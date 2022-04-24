@@ -6,10 +6,10 @@ namespace Player
 {
     public interface IGroundedDetector
     {
-        bool CanWalk { get; }
+        bool IsGrounded { get; }
     }
 
-    class GroundedDetector : MonoBehaviour, IGroundedDetector
+    public class GroundedDetector : MonoBehaviour, IGroundedDetector
     {
         private SphereCollider feet;
 
@@ -22,7 +22,7 @@ namespace Player
             this.AssignGetComponentTo(out feet);
         }
 
-        public bool CanWalk => grounded;
+        public bool IsGrounded => grounded;
 
         private void FixedUpdate()
         {

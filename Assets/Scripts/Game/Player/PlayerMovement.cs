@@ -97,7 +97,7 @@ namespace Player
             if(movement.ReachedMaxMovementVelocity)
                 return;
 
-            if (!groundedDetector.CanWalk)
+            if (!groundedDetector.IsGrounded)
                 return;
 
             var movementDirection = GetMovementInput();

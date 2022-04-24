@@ -23,8 +23,8 @@ namespace Player
             Walking,
             Running
         }
-        [SerializeField] private Walking walking;
-        [SerializeField] private Running running;
+         private Walking walking;
+         private Running running;
 
         private ReadOnlyDictionary<MovementMode, IMovement> modes;
 

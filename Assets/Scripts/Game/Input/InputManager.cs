@@ -36,9 +36,13 @@ public class InputManager : Singleton<InputManager>
     public bool GetPlayerSprintButtonDown()
         => playerControls.Player.Sprint.triggered;
 
+    public bool GetPlayerJumpButtonDown() 
+        => playerControls.Player.Jump.triggered;
+
 
     public bool DebugKeyPressed(Key key) 
         => Keyboard.current[key].wasPressedThisFrame;
+
     public bool DebugKeyHeld(Key key) 
         => Keyboard.current[key].isPressed;
 }
