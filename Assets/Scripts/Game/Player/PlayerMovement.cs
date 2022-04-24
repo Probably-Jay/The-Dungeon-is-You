@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
+using CustomDebug;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using Utility;
 
 namespace Player
@@ -17,7 +20,7 @@ namespace Player
             this.movementVariables = movementVariables;
         }
 
-        public bool ReachedMaxMovementVelocity => false;
+        public bool ReachedMaxMovementVelocity => false; // lol
 
         public void ApplyMovement(Vector3 movementDirection)
         {
@@ -44,7 +47,8 @@ namespace Player
             this.movementVariables = movementVariables;
         }
 
-        public bool ReachedMaxMovementVelocity => rb.velocity.magnitude >= movementVariables.maxRunVelocity;
+  
+        public bool ReachedMaxMovementVelocity => rb.GetHorizontalVelocity() >= movementVariables.maxRunVelocity;
 
         public void ApplyMovement(Vector3 movementDirection)
         {
@@ -77,7 +81,12 @@ namespace Player
             
             moveModeProvider.AssignDependencies(rb, movementVariables);
         }
-        
+
+        private void Update()
+        {
+            DebugText.Instance["Speed"] = $"{rb.GetHorizontalVelocity():#0.##} {rb.velocity.ToString()}";
+        }
+
         private void FixedUpdate()
         {
             SetMovementMode();
@@ -123,20 +132,11 @@ namespace Player
             var movementDirection = RotateInputToLocal(movementInput);
             return movementDirection;
         }
-
-      
-
+        
 
         private Vector3 RotateInputToLocal(Vector3 movementInput) 
             => transform.rotation * movementInput;
 
-        public void SetDependencies(IInputGatherer inputGathererIn, IGroundedDetector groundDetectorIn)
-        {
-            inputGatherer = inputGathererIn;
-            groundedDetector = groundDetectorIn;
-        }
-
-       
 
         [Serializable]
         public struct MovementVariables
@@ -144,10 +144,19 @@ namespace Player
             public float runValue;
             public float walkValue;
             public float maxRunVelocity;
-      //      public float maxWalkVelocity;
             public float minRunVelocity;
-            public float jumpForce;
-          
         }
     }
+
+
+    public static class RigidbodyExtensions
+    {
+        public static float GetHorizontalVelocity(this Rigidbody rb)
+        {
+            var horizontalMovement = rb.velocity;
+            horizontalMovement.y = 0;
+            return horizontalMovement.magnitude;
+        }
+    }
+    
 }

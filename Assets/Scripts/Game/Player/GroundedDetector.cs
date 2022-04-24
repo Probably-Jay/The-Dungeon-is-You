@@ -1,4 +1,5 @@
 ﻿using System;
+using CustomDebug;
 using UnityEngine;
 using Utility;
 
@@ -23,6 +24,11 @@ namespace Player
         }
 
         public bool IsGrounded => grounded;
+
+        private void Update()
+        {
+            DebugText.Instance["Grounded"] = grounded.ToString();
+        }
 
         private void FixedUpdate()
         {

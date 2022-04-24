@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using CustomDebug;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using Utility;
 
 namespace Player
@@ -23,7 +25,7 @@ namespace Player
             
             this.AssignGetComponentTo(out rb);
         }
-
+        
         private void FixedUpdate()
         {
             JumpProcedure();

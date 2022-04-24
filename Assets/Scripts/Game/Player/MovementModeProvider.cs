@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using CustomDebug;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -15,7 +17,7 @@ namespace Player
 
     public class MovementModeProvider : MonoBehaviour
     {
-        [SerializeField] private MovementMode debugForcedMode = MovementMode.None;
+        [SerializeField,Description("Forces mode to always be this value if not \"None\"")] private MovementMode debugForcedMode = MovementMode.None;
         [SerializeField,Description("Debug readout of current mode (readonly)")] private MovementMode debugCurrentModeReadonly = MovementMode.None;
         public enum MovementMode
         {
@@ -45,7 +47,7 @@ namespace Player
         public void UpdateMovementMode(bool sprintButtonPressed, Vector3 rbVelocity,
             PlayerMovement.MovementVariables movementVariables)
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR // override this with the debug forceModeType
             if (debugForcedMode != MovementMode.None)
             {
                 Mode = debugForcedMode;
@@ -55,7 +57,12 @@ namespace Player
             Mode = ModeDeterminer.DetermineMovementMode(Mode, sprintButtonPressed, rbVelocity,movementVariables.minRunVelocity);
             debugCurrentModeReadonly = Mode;
         }
-       
+
+
+        private void Update()
+        {
+            DebugText.Instance["Movement Mode"] = Mode.ToString();
+        }
     }
     internal static class ModeDeterminer
     {
