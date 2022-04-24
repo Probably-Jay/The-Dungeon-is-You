@@ -97,12 +97,23 @@ namespace Player
             if(movement.ReachedMaxMovementVelocity)
                 return;
 
-            if (!groundedDetector.IsGrounded)
-                return;
-
-            var movementDirection = GetMovementInput();
+            if (groundedDetector.IsGrounded)
+                ApplyGroundedMovement(movement);
+            else
+                ApplyAirMovement(movement);
             
+        }
+
+        private void ApplyGroundedMovement(IMovement movement)
+        {
+            var movementDirection = GetMovementInput();
+
             movement.ApplyMovement(movementDirection);
+        }
+
+        private void ApplyAirMovement(IMovement movement)
+        {
+            return;
         }
 
         private Vector3 GetMovementInput()
