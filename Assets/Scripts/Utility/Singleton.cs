@@ -28,7 +28,6 @@ namespace Singleton
                 {
                     TryInitialiseSingleton();
                 }
-                // AssertInstanceExists();
                 return instance;
             }
 
@@ -43,8 +42,7 @@ namespace Singleton
         /// <summary>
         /// Returns <see cref="Instance"/> if it exists, else returns <c>null</c>
         /// </summary>
-        [CanBeNull]
-        public static T TryInstance 
+        [CanBeNull] public static T TryInstance 
             => InstanceExists 
                 ? Instance 
                 : null;
@@ -88,10 +86,14 @@ namespace Singleton
             if (singletons.Length > 1)
                 throw new MultipleSingletonInSceneException(singletons);
 
-            return singletons.First();
+            return singletons.First() ?? throw new Exception("Singleton was unexpectedly null");
         }
 
-        private static void SetSingleton([NotNull] T thisSingleton)
+        /// <summary>
+        /// Set the found singleton as the instance
+        /// </summary>
+        /// <param name="thisSingleton">Reference to the found object</param>
+        private static void SetSingleton([NotNull]T thisSingleton)
         {
             if (thisSingleton == null) 
                 throw new ArgumentNullException(nameof(thisSingleton), "Cannot set singleton as singleton may not exist");

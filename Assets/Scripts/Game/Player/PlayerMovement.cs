@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using CustomDebug;
+using CustomTools;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.PlayerLoop;

@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using Utility;
 
-namespace CustomDebug
+namespace CustomTools
 {
     public class DebugText : Singleton<DebugText>
     {
