@@ -13,8 +13,6 @@ namespace Player
     {
         private Transform cameraTransform;
 
-        private CinemachineVirtualCamera virtualCamera;
-        
         private void Awake()
         {
             // ReSharper disable once PossibleNullReferenceException
@@ -24,7 +22,7 @@ namespace Player
         private void FixedUpdate()
         {
             var currentRotation = transform.rotation.eulerAngles;
-            transform.rotation = Quaternion.Euler(currentRotation.x, cameraTransform.rotation.eulerAngles.y, currentRotation.z );
+            transform.rotation = Quaternion.Euler(currentRotation.x, cameraTransform.rotation.eulerAngles.y, currentRotation.z);
         }
     }
 }

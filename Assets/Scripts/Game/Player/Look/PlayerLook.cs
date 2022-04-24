@@ -4,6 +4,7 @@ using Utility;
 
 namespace Player
 {
+    [Obsolete]
     public class PlayerLook : MonoBehaviour
     {
         private ILookGatherer lookGatherer;

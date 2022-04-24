@@ -3,11 +3,13 @@ using UnityEngine;
 
 namespace Player
 {
+    [Obsolete]
     internal interface ILookGatherer
     {
         float ReadMouseHorizontalDelta();
         float ReadMouseVerticalDelta();
     }
+    [Obsolete]
     class LookGatherer : MonoBehaviour, ILookGatherer
     {
         [SerializeField] private bool lockMouse = true;

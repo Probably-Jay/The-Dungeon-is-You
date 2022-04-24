@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ using Player;
 
 namespace Game.Camera.CinemachineExtenstions
 {
+    [Obsolete]
     public class CinemachinePovExtenstion : CinemachineExtension
     {
         private LookGatherer lookGatherer;
